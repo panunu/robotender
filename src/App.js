@@ -139,7 +139,7 @@ class App extends Component {
     // TODO: Make the API call here.
 
     setTimeout(() => {
-      this.say('All done! Enjoy your evening with your increased alcohol level in your blood')
+      this.say('All done! I hope you will have a lovely evening.')
 
       this.setState({ status: 'done' })
 
