@@ -1,32 +1,74 @@
+@import url('https://fonts.googleapis.com/css?family=IBM+Plex+Mono');
+
 .App {
-  text-align: center;
-}
-
-.App-logo {
-  animation: App-logo-spin infinite 20s linear;
-  height: 40vmin;
-}
-
-.App-header {
-  background-color: #282c34;
-  min-height: 100vh;
   display: flex;
-  flex-direction: column;
-  align-items: center;
+
+  text-align: center;
+
+  height: 100vh;
+  width: 100vw;
+
+  align-content: center;
   justify-content: center;
-  font-size: calc(10px + 2vmin);
+  justify-items: center;
+  align-items: center;
+
+  /*background: #316066;*/
+  background: #463068;
+
   color: white;
+  font-size: 64px;
+  font-weight: 800;
+  font-family: 'IBM Plex Mono', monospace;
 }
 
-.App-link {
-  color: #61dafb;
+.sub {
+  font-size: 32px;
+  margin-top: 5vh;
+  font-weight: 100;
 }
 
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
+.brand {
+  position: absolute;
+  right: 16px;
+  bottom: 16px;
+
+  font-size: 16px;
+
+  background: white;
+  border-radius: 8px;
+  color: black;
+  padding: 2px 8px;
+  letter-spacing: -1px;
+}
+
+.cards {
+  display: flex;
+  flex-direction: row;
+  align-content: space-between;
+}
+
+.card {
+  flex: 1.2;
+  padding: 20px;
+  background: rgba(255, 255, 255, 0.2);
+
+  border-radius: 10px;
+  border: 4px solid rgba(255, 255, 255, 0.7);
+}
+
+.card .sub {
+  font-size: 16px;
+}
+
+.card h2 {
+  font-size: 32px;
+  padding-bottom: 0;
+  margin-bottom: 0;
+}
+
+.listening {
+  position: absolute;
+  left: 0;
+  top: 0;
 }
