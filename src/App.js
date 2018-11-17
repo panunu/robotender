@@ -21,7 +21,6 @@ const words = [
   'number two',
   'one',
   'two',
-  'love you',
 ]
 const grammar = `#JSGF V1.0; grammar words; public <word> = ${words.join(' | ')} ;`
 const speechRecognitionList = new SpeechGrammarList()
@@ -98,10 +97,6 @@ class App extends Component {
       word.includes('cheers')
     ) {
       this.say('Oh... you are so kind')
-    }
-
-    if (word.includes('love you')) {
-      this.say('I love you, too. Or then I am just drunk')
     }
 
     if (word.includes('*')) {
