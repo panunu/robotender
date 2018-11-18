@@ -1,7 +1,6 @@
 import React, { Component } from 'react'
 import './App.css'
 import Lottie from 'react-lottie'
-import * as fillAnimation from './pink_drink_machine.json'
 
 const SpeechRecognition = SpeechRecognition || window.webkitSpeechRecognition
 const SpeechGrammarList = SpeechGrammarList || window.webkitSpeechGrammarList
@@ -35,11 +34,40 @@ recognition.maxAlternatives = 1
 
 const synth = window.speechSynthesis
 
+const doneAnimation = {
+  loop: true,
+  autoplay: true,
+  animationData: require('./thirsty'),
+  rendererSettings: {
+    preserveAspectRatio: 'xMidYMid slice'
+  }
+}
+
+const fillAnimation = {
+  ...doneAnimation,
+  animationData: require('./loader'),
+}
+
+const idleAnimation = {
+  ...doneAnimation,
+  animationData: require('./soda_loader'),
+}
+
+const listeningAnimation = {
+  ...doneAnimation,
+  animationData: require('./ripple_loading_animation'),
+}
+
+const sadAnimation = {
+  ...doneAnimation,
+  animationData: require('./sad'),
+}
+
 class App extends Component {
   state = {
     shouldBeListening: true,
     isListening: false,
-    status: 'hello', // hello | drink? | choice | fill
+    status: 'hello', // hello | drink? | choice | fill | done | cancel
   }
 
   componentDidMount() {
@@ -49,7 +77,8 @@ class App extends Component {
       const word = event.results[event.results.length - 1][0].transcript
 
       if (!this.state.shouldBeListening || synth.speaking || synth.pending) {
-        try { recognition.abort() } catch (e) { }
+        // try { recognition.abort() } catch (e) { }
+        // TODO: Try to avoid listening when speaking.
 
         return
       }
@@ -62,7 +91,7 @@ class App extends Component {
     recognition.onaudioend = () => this.setState({ isListening: false })
     recognition.onaudiostart = () => this.setState({ isListening: true })
 
-    setInterval(() => { try { this.state.shouldBeListening && recognition.start() } catch (e) { } } , 100)
+    setInterval(() => { try { this.state.shouldBeListening && recognition.start() } catch (e) { } } , 200)
   }
 
   artificialIntelligence = word => {
@@ -114,13 +143,15 @@ class App extends Component {
   }
 
   cancel = () => {
-    this.say('Ok, well, fuck off')
+    this.say('Aww... That makes me a sad robot. It is so lonely here!')
 
-    this.setState({ status: 'hello' })
+    this.setState({ status: 'cancel' })
+
+    setTimeout(() => this.setState({ status: 'hello' }), 6500)
   }
 
   chooseDrink = () => {
-    this.say('Got it! Take a look at the drink list. Let me know what you want.')
+    this.say('Got it! Take a look at the drink list. Let me know what would you like.')
 
     this.setState({ status: 'choice' })
   }
@@ -139,7 +170,7 @@ class App extends Component {
     // TODO: Make the API call here.
 
     setTimeout(() => {
-      this.say('All done! I hope you will have a lovely evening.')
+      this.say('Here you go! I hope you will have a lovely evening.')
 
       this.setState({ status: 'done' })
 
@@ -164,35 +195,20 @@ class App extends Component {
   render() {
     const { status } = this.state
 
-    const done = {
-      loop: true,
-      autoplay: true,
-      animationData: require('./thirsty'),
-      rendererSettings: {
-        preserveAspectRatio: 'xMidYMid slice'
-      }
-    }
-
-    const fill = {
-      ...done,
-      animationData: require('./loader'),
-    }
-
-    const idle = {
-      ...done,
-      animationData: require('./soda_loader'),
-    }
-
-    const listening = {
-      ...done,
-      animationData: require('./ripple_loading_animation'),
+    const backgroundColors = {
+      hello: '#293868',
+      'drink?': '#6e46a0',
+      choice: '#610051',
+      fill: '#463068',
+      done: '#463068',
+      cancel: '#7c879a',
     }
 
     return (
-      <div className="App">
+      <div className="App" style={{ backgroundColor: backgroundColors[status] }}>
         {status === 'hello' && <div>
           <Lottie
-            options={idle}
+            options={idleAnimation}
             height={400}
             width={400}
           />
@@ -204,7 +220,7 @@ class App extends Component {
 
         {status === 'drink?' && <div>
           <Lottie
-            options={idle}
+            options={idleAnimation}
             height={400}
             width={400}
           />
@@ -241,7 +257,7 @@ class App extends Component {
 
         {status === 'fill' && <div>
           <Lottie
-            options={fill}
+            options={fillAnimation}
             height={600}
             width={600}
           />
@@ -253,27 +269,35 @@ class App extends Component {
 
         {status === 'done' && <div>
           <Lottie
-            options={done}
+            options={doneAnimation}
             height={600}
             width={600}
           />
 
-          Done!
+          All done!
 
           <div className="sub">Have a nice evening.</div>
+        </div>}
+
+        {status === 'cancel' && <div>
+          <Lottie
+            options={sadAnimation}
+            height={1000}
+            width={1000}
+          />
         </div>}
 
         <div className="listening">
           {this.state.isListening &&
             <Lottie
-              options={listening}
+              options={listeningAnimation}
               height={80}
               width={80}
             />
           }
         </div>
 
-        <div class="brand">RoboTender</div>
+        <div className="brand">RoboTender</div>
       </div>
     );
   }

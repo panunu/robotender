@@ -13,8 +13,8 @@
   justify-items: center;
   align-items: center;
 
-  /*background: #316066;*/
   background: #463068;
+  transition: background-color 3s;
 
   color: white;
   font-size: 64px;
